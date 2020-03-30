@@ -15,6 +15,6 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 
 export const START_LOGIN = 'boilerplate/App/START_LOGIN';
 export const LOGIN_SUCCESS = 'boilerplate/App/LOGIN_SUCCESS';
-export const LOGIN_ERROR = 'boilerplate/App/LOGIN_SUCCESS';
+export const LOGIN_ERROR = 'boilerplate/App/LOGIN_ERROR';
 
 export const START_LOGOUT = 'boilerplate/App/START_LOGOUT';

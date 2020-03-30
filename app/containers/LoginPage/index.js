@@ -95,7 +95,6 @@ export function LoginPage({
 }
 
 LoginPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   loggedUser: PropTypes.object,

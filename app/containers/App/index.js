@@ -8,9 +8,10 @@
 
 import React from 'react';
 // import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
+import DevicesPage from 'containers/DevicesPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
@@ -21,11 +22,15 @@ import './index.css';
 
 import { Layout, Menu } from 'antd';
 import {
+  AreaChartOutlined,
+  ApartmentOutlined,
   HomeOutlined,
-  UploadOutlined,
+  InfoOutlined,
+  MonitorOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from '@ant-design/icons';
+import GlobalStyle from '../../global-styles';
+const { SubMenu } = Menu;
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -52,29 +57,87 @@ export default function App() {
         }}
       >
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}>
           <Menu.Item key="0">
             <HomeOutlined />
-            <span className="nav-text">Home</span>
+            <span className="nav-text">
+              <Link to="/">Home</Link>
+            </span>
           </Menu.Item>
+
           <Menu.Item key="1">
             <UserOutlined />
             <span className="nav-text">Users</span>
           </Menu.Item>
-          <Menu.Item key="2">
-            <VideoCameraOutlined />
-            <span className="nav-text">Devices</span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <UploadOutlined />
-            <span className="nav-text">Inventory</span>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <UserOutlined />
+
+          <SubMenu
+            key="2"
+            title={
+              <span>
+                <ApartmentOutlined />
+                <span>Inventory</span>
+              </span>
+            }
+          >
+            <Menu.Item key="2.1">
+              <span className="nav-text">
+                <Link to="/devices" style={{ textDecoration: 'none' }}>
+                  Devices
+                </Link>
+              </span>
+            </Menu.Item>
+            <Menu.Item key="2.2">
+              <span className="nav-text">Tunnels</span>
+            </Menu.Item>
+            <Menu.Item key="2.3">
+              <span className="nav-text">Tokens</span>
+            </Menu.Item>
+            <Menu.Item key="2.4">
+              <span className="nav-text">Path Labels</span>
+            </Menu.Item>
+          </SubMenu>
+
+          <SubMenu
+            key="3"
+            title={
+              <span>
+                <AreaChartOutlined />
+                <span>Dashboard</span>
+              </span>
+            }
+          >
+            <Menu.Item key="3.1">
+              <span className="nav-text">Network</span>
+            </Menu.Item>
+            <Menu.Item key="3.2">
+              <span className="nav-text">Traffic</span>
+            </Menu.Item>
+          </SubMenu>
+
+          <SubMenu
+            key="4"
+            title={
+              <span>
+                <MonitorOutlined />
+                <span>Troubleshoot</span>
+              </span>
+            }
+          >
+            <Menu.Item key="4.1">
+              <span className="nav-text">Jobs</span>
+            </Menu.Item>
+            <Menu.Item key="4.2">
+              <span className="nav-text">Notifications</span>
+            </Menu.Item>
+          </SubMenu>
+
+          <Menu.Item key="5">
+            <InfoOutlined />
             <span className="nav-text">About</span>
           </Menu.Item>
         </Menu>
       </Sider>
+
       <Layout>
         <Header
           className="site-layout-sub-header-background"
@@ -86,9 +149,10 @@ export default function App() {
             style={{ padding: 24, minHeight: 360 }}
           >
             <Switch>
-              <Route exact path="/" component={HomePage} />
+              <Route exact path="/" component={FeaturePage} />
+              <Route path="/devices" component={DevicesPage} />
               <Route path="/login" component={LoginPage} />
-              <Route path="/features" component={FeaturePage} />
+              <Route path="/repos" component={HomePage} />
               <Route path="" component={NotFoundPage} />
             </Switch>
           </div>
@@ -97,6 +161,7 @@ export default function App() {
           Ant Design ©2020 Created by Ant UED
         </Footer>
       </Layout>
+      <GlobalStyle />
     </Layout>
   );
 }

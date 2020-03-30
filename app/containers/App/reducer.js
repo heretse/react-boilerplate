@@ -67,12 +67,14 @@ const appReducer = (state = initialState, action) =>
           username: action.username,
           name: action.body.name,
           token: action.body.token,
-          refreshToken: action.body.refreshToken,
+          refreshToken: action.body['refresh-token'],
         };
         break;
+
       case LOGIN_ERROR:
         draft.error = action.error;
         draft.loading = false;
+        draft.loggedUser = null;
         break;
     }
   });
