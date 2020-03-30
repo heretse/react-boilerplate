@@ -158,7 +158,7 @@ export default function App() {
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©2020 Created by Ant UED
+          Gemtek Technology Co., Ltd. ©2020
         </Footer>
       </Layout>
       <GlobalStyle />
