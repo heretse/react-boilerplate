@@ -4,7 +4,7 @@
  *
  */
 import produce from 'immer';
-import { FETCH_DEVICES_SUCCESSED } from './constants';
+import { FETCH_DEVICES, FETCH_DEVICES_SUCCESSED } from './constants';
 
 export const initialState = {
   devices: [],
@@ -14,6 +14,9 @@ export const initialState = {
 const devicesPageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
+      case FETCH_DEVICES:
+        draft.devices = [];
+        break;
       case FETCH_DEVICES_SUCCESSED:
         draft.devices = action.devices;
         break;
