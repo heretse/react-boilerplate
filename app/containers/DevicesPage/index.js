@@ -23,7 +23,11 @@ import {
   SyncOutlined,
 } from '@ant-design/icons';
 
-import { makeSelectLoggedUser } from 'containers/App/selectors';
+import {
+  makeSelectLoading,
+  // makeSelectError,
+  makeSelectLoggedUser,
+} from 'containers/App/selectors';
 import makeSelectDevicesPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -71,6 +75,8 @@ function generateCard(devices) {
 }
 
 export function DevicesPage({
+  loading,
+  // error,
   dispatch,
   loggedUser,
   devicesPage,
@@ -96,13 +102,23 @@ export function DevicesPage({
       </Helmet>
       <FormattedMessage {...messages.header} />
       &nbsp;
-      <Button shape="circle" onClick={onFetchDevices} icon={<SyncOutlined />} />
+      {loading ? (
+        <SyncOutlined spin />
+      ) : (
+        <Button
+          shape="circle"
+          onClick={onFetchDevices}
+          icon={<SyncOutlined />}
+        />
+      )}
       {generateCard(devicesPage.devices)}
     </div>
   );
 }
 
 DevicesPage.propTypes = {
+  loading: PropTypes.bool,
+  // error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   dispatch: PropTypes.func.isRequired,
   loggedUser: PropTypes.object,
   devicesPage: PropTypes.object.isRequired,
@@ -110,6 +126,8 @@ DevicesPage.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  loading: makeSelectLoading(),
+  // error: makeSelectError(),
   loggedUser: makeSelectLoggedUser(),
   devicesPage: makeSelectDevicesPage(),
 });

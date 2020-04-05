@@ -18,6 +18,12 @@ import {
   LOGIN_ERROR,
 } from './constants';
 
+import {
+  FETCH_DEVICES,
+  FETCH_DEVICES_SUCCESSED,
+  FETCH_DEVICES_FAILED,
+} from '../DevicesPage/constants';
+
 // The initial state of the App
 export const initialState = {
   loading: false,
@@ -75,6 +81,20 @@ const appReducer = (state = initialState, action) =>
         draft.error = action.error;
         draft.loading = false;
         draft.loggedUser = null;
+        break;
+
+      case FETCH_DEVICES:
+        draft.loading = false;
+        draft.error = false;
+        break;
+
+      case FETCH_DEVICES_SUCCESSED:
+        draft.loading = false;
+        break;
+
+      case FETCH_DEVICES_FAILED:
+        draft.error = action.error;
+        draft.loading = false;
         break;
     }
   });

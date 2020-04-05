@@ -21,26 +21,31 @@ import {
   makeSelectLoggedUser,
 } from 'containers/App/selectors';
 import H2 from 'components/H2';
-// import LoadingIndicator from 'components/LoadingIndicator';
 
+import { Input, Button } from 'antd';
+import { SyncOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons';
 import { startLogin } from '../App/actions';
 import { changeUsername, changePassword } from './actions';
 import { makeSelectUsername, makeSelectPassword } from './selectors';
 
-import AtPrefix from './AtPrefix';
 import CenteredSection from './CenteredSection';
 import Form from './Form';
-import Input from './Input';
+// import Input from './Input';
 
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
+function showLoading(loading) {
+  if (loading) return <SyncOutlined spin />;
+  return <></>;
+}
+
 export function LoginPage({
   loggedUser,
   username,
   password,
-  // loading,
+  loading,
   // error,
   onSubmitForm,
   onChangeUsername,
@@ -60,34 +65,40 @@ export function LoginPage({
       <CenteredSection>
         <H2>
           <FormattedMessage {...messages.header} />
+          {showLoading(loading)}
         </H2>
         <Form onSubmit={onSubmitForm}>
           <label htmlFor="username">
-            <AtPrefix>Username:</AtPrefix>
             <Input
               id="username"
               type="text"
-              placeholder=""
+              size="large"
+              placeholder="Enter your username"
               value={username}
+              prefix={<UserOutlined />}
               onChange={onChangeUsername}
             />
           </label>
-          <br />
+          &nbsp;
           <label htmlFor="password">
-            <AtPrefix>Password:</AtPrefix>
-            <Input
+            <Input.Password
               id="password"
               type="password"
-              placeholder=""
+              size="large"
+              placeholder="Enter your password"
               value={password}
+              prefix={<KeyOutlined />}
               onChange={onChangePassword}
             />
           </label>
-          <CenteredSection>
-            <input type="submit" value="Login" />
+          <br />
+          <label htmlFor="action">
+            <Button type="submit" onClick={onSubmitForm}>
+              Login
+            </Button>
             &nbsp;
-            <input type="reset" value="Reset" />
-          </CenteredSection>
+            <Button type="reset">Reset</Button>
+          </label>
         </Form>
       </CenteredSection>
     </div>

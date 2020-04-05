@@ -15,6 +15,8 @@ import DevicesPage from 'containers/DevicesPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import TokensPage from 'containers/TokensPage/Loadable';
+import AddTokenPage from 'containers/AddTokenPage/Loadable';
 
 // ant-design
 import 'antd/dist/antd.css';
@@ -81,16 +83,16 @@ export default function App() {
           >
             <Menu.Item key="2.1">
               <span className="nav-text">
-                <Link to="/devices" style={{ textDecoration: 'none' }}>
-                  Devices
-                </Link>
+                <Link to="/devices">Devices</Link>
               </span>
             </Menu.Item>
             <Menu.Item key="2.2">
               <span className="nav-text">Tunnels</span>
             </Menu.Item>
             <Menu.Item key="2.3">
-              <span className="nav-text">Tokens</span>
+              <span className="nav-text">
+                <Link to="/tokens">Tokens</Link>
+              </span>
             </Menu.Item>
             <Menu.Item key="2.4">
               <span className="nav-text">Path Labels</span>
@@ -153,6 +155,8 @@ export default function App() {
               <Route path="/devices" component={DevicesPage} />
               <Route path="/login" component={LoginPage} />
               <Route path="/repos" component={HomePage} />
+              <Route path="/tokens" component={TokensPage} />
+              <Route path="/addToken" component={AddTokenPage} />
               <Route path="" component={NotFoundPage} />
             </Switch>
           </div>
