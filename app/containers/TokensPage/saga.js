@@ -56,7 +56,8 @@ export function* callDeleteToken() {
       },
     );
 
-    yield put(deleteTokenSuccessed(body.get('_id')));
+    /* eslint no-underscore-dangle: 0 */
+    yield put(deleteTokenSuccessed(body._id));
     yield put(push('/tokens'));
   } catch (err) {
     // yield put(fetchTokensFailed(err));

@@ -15,12 +15,16 @@ import { Redirect } from 'react-router-dom';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { Button, Skeleton, Card } from 'antd';
+import A from 'components/A';
+import { Button, Skeleton, Card, Checkbox, Menu, Dropdown } from 'antd';
 import {
+  CheckCircleOutlined,
+  DownOutlined,
+  DeleteOutlined,
   EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
+  // StopOutlined,
   SyncOutlined,
+  // PlayCircleOutlined,
 } from '@ant-design/icons';
 
 import {
@@ -33,44 +37,75 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 
-import { fetchDevices } from './actions';
+import {
+  approveDevice,
+  checkAllDevices,
+  checkDevice,
+  deleteDevice,
+  fetchDevices,
+} from './actions';
 
 const { Meta } = Card;
 
-function generateCard(devices) {
+function generateCard(state, dispatch) {
+  const { checkedList } = state;
+  const { devices } = state;
+
   if (!devices) {
     return null;
   }
   if (!devices.length) {
     return <p>Sorry, the list is empty.</p>;
   }
+
+  /* eslint no-underscore-dangle: 0 */
   return (
-    <div>
+    <Checkbox.Group
+      value={checkedList}
+      onChange={list => {
+        dispatch(checkDevice(list));
+      }}
+    >
       {devices.map(device => (
         <Card
           style={{ width: 300, marginTop: 16 }}
           actions={[
-            <SettingOutlined key="setting" />,
+            <CheckCircleOutlined
+              onClick={() => dispatch(approveDevice(device._id))}
+            />,
+            // <PlayCircleOutlined />,
+            // <StopOutlined />,
+            <DeleteOutlined
+              onClick={() => dispatch(deleteDevice(device._id))}
+            />,
             <EditOutlined key="edit" />,
-            <EllipsisOutlined key="ellipsis" />,
           ]}
         >
+          <Checkbox value={device._id} />
           <Skeleton loading={false} active>
             <Meta
               title={`${device.fromToken}`}
               description={`ID: ${device.machineId}`}
             />
             <p>
-              Approved: {device.isApproved ? 'Yes' : 'No'}
+              {device.isApproved ? (
+                <Button type="primary">Approved</Button>
+              ) : (
+                <Button type="danger">Not Approved</Button>
+              )}
               <br />
-              Connected: {device.isConnected ? 'Yes' : 'No'}
+              {device.isConnected ? (
+                <Button type="primary">Connected</Button>
+              ) : (
+                <Button type="danger">Not Connected</Button>
+              )}
               <br />
               Hostname: {device.hostname}
             </p>
           </Skeleton>
         </Card>
       ))}
-    </div>
+    </Checkbox.Group>
   );
 }
 
@@ -92,6 +127,10 @@ export function DevicesPage({
     }
   }, []);
 
+  const onMenuClick = ({ key }) => {
+    console.log(`Click on item ${key}`);
+  };
+
   return loggedUser === null ? (
     <Redirect to="/login" />
   ) : (
@@ -101,6 +140,16 @@ export function DevicesPage({
         <meta name="description" content="Description of DevicesPage" />
       </Helmet>
       <FormattedMessage {...messages.header} />
+      <br />
+      <Checkbox
+        all
+        checked={devicesPage.checkAll}
+        onChange={e => {
+          dispatch(checkAllDevices(e.target.checked));
+        }}
+      >
+        Select All
+      </Checkbox>
       &nbsp;
       {loading ? (
         <SyncOutlined spin />
@@ -111,7 +160,31 @@ export function DevicesPage({
           icon={<SyncOutlined />}
         />
       )}
-      {generateCard(devicesPage.devices)}
+      &nbsp;
+      <Dropdown
+        overlay={
+          <Menu onClick={onMenuClick}>
+            <Menu.Item key="0" disabled>
+              Device Operations
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Item key="1">Create Tunnels</Menu.Item>
+            <Menu.Item key="2">Upgrade Device</Menu.Item>
+            <Menu.Item key="2">Schedule Device Upgrade</Menu.Item>
+          </Menu>
+        }
+        trigger={['click']}
+      >
+        <A
+          className="ant-dropdown-link"
+          onClick={e => e.preventDefault()}
+          onKeyDown={() => {}}
+        >
+          Actions <DownOutlined />
+        </A>
+      </Dropdown>
+      <br />
+      {generateCard(devicesPage, dispatch)}
     </div>
   );
 }

@@ -24,8 +24,9 @@ const tokensPageReducer = (state = initialState, action) =>
         draft.tokens = [];
         break;
       case FETCH_TOKENS_SUCCESSED:
+        /* eslint no-underscore-dangle: 0 */
         draft.tokens = action.tokens.map(item => ({
-          key: item.get('_id'),
+          key: item._id,
           name: item.name,
           token: item.token,
           createdAt: item.createdAt,
