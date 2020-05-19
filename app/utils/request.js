@@ -5,11 +5,48 @@
  *
  * @return {object}          The parsed JSON from the request
  */
+// function parseJSON(response) {
+//   if (response.status === 204 || response.status === 205) {
+//     return null;
+//   }
+
+//   return response.json();
+// }
+
 function parseJSON(response) {
   if (response.status === 204 || response.status === 205) {
     return null;
   }
-  return response.json();
+
+  const reader = response.body.getReader();
+  let result = '';
+
+  // read() returns a promise that resolves
+  // when a value has been received
+  return reader.read().then(function processText({ done, value }) {
+    // Result objects contain two properties:
+    // done  - true if the stream has already given you all its data.
+    // value - some data. Always undefined when done is true.
+    if (done) {
+      console.log('Stream complete');
+      const obj = JSON.parse(result);
+
+      response.headers.forEach(header => {
+        const [key, val] = header;
+        if (key === 'refresh-jwt') obj.token = val;
+        if (key === 'refresh-token') obj['refresh-token'] = val;
+      });
+
+      return obj;
+    }
+
+    // value for fetch streams is a Uint8Array
+    const chunk = value;
+    result += new TextDecoder('utf-8').decode(chunk);
+
+    // Read some more, and call this function again
+    return reader.read().then(processText);
+  });
 }
 
 /**
